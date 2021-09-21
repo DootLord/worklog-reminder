@@ -1,0 +1,30 @@
+.introArea {
+    text-align: center;
+}
+
+.miniContainer {
+    width:60%;
+    margin: 0 auto;
+    margin-top:5%;
+}
+
+.marginSpacerBottom {
+    margin-bottom: 3rem;
+}
+
+h1 {
+    margin:0.8rem 0 1.68rem 0 !important;
+    text-decoration: underline;
+}
+
+.noMargin {
+    margin:0;
+}
+
+.halfWidth {
+    width: 50%;
+}
+
+.btnContainer {
+    display: flex;
+}

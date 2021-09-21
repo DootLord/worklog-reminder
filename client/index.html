@@ -1,0 +1,80 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <link rel="stylesheet" href="./libs/materialize.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <title>Shaun's Tempo Tracker</title>
+</head>
+
+<body>
+  <div class="introArea">
+    <h1>Tempo Tracker</h1>
+    <p> A simple lil tool I made to help me keep on worklogs because I'm terrible at at! </p>
+
+    <div class="miniContainer">
+      <div class="input-field col s12 marginSpacerBottom">
+        <select id="timeDropdown">
+          <option value="" disabled selected>How often do you want reminders?</option>
+          <option value="1800">30 Minutes</option>
+          <option value="3600">1 Hour</option>
+          <option value="5400">1 Hour 30 Minutes</option>
+          <option value="7200">2 Hours</option>
+          <option value="na">DISABLED</option>
+        </select>
+        <label>How often do you want to be reminded?</label>
+      </div>
+
+      <h5 class="noMargin"> Work Info </h5>
+      <div class="input-field col s6">
+        <input id="workTitle" type="text">
+        <label for="workTitle">Work Entry Title</label>
+      </div>
+
+      <div class="input-field col s12">
+        <textarea id="workDesc" class="materialize-textarea"></textarea>
+        <label for="taskDesc">Write a description of the work you've done.</label>
+      </div>
+
+      <div class="btnContainer">
+        <a id="submitWork" class="halfWidth waves-effect waves-light btn green">Submit</a>
+
+        <a id="viewWork"class="halfWidth waves-effect waves-light btn modal-trigger" href="#modal1">View Work</a>
+      </div>
+
+      
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+        <h4 id="workDate"> Loading... </h4>
+        <div class="modal-content">
+          <table>
+            <thead>
+              <tr>
+                <th>Work Item</th>
+                <th>Description</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+
+            <tbody id="workTable">
+             
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- <script src="./libs/jquery.js"></script> -->
+  <script src="./libs/materialize.min.js"></script>
+  <script src="./client.js"></script>
+</body>
+
+</html>
