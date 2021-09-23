@@ -7,9 +7,6 @@ let timeoutEvent = null;
 let activeWindow = null;
 let timeVal = null;
 var workDates = [];
-let workItems = {};
-
-
 
 function createWindow(htmlPath = "client/index.html") {
     const win = new BrowserWindow({
@@ -25,8 +22,6 @@ function createWindow(htmlPath = "client/index.html") {
 
     activeWindow = win;
 }
-
-app.whenReady().then(init);
 
 function init() {
     createWindow();
@@ -46,10 +41,10 @@ function init() {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 
-    if(store.get("workLog") !== undefined) {
+    if (store.get("workLog") !== undefined) {
         var workLog = store.get("workLog");
 
-        for(const [key, value] of Object.entries(workLog)) {
+        for (const [key, value] of Object.entries(workLog)) {
             workDates.push(key);
         }
 
@@ -90,7 +85,7 @@ function init() {
     ipcMain.on("requestWorkData", (event, arg) => {
         var selectedDate = getTodayDate();
 
-        if(arg !== undefined) {
+        if (arg !== undefined) {
             selectedDate = arg;
         }
 
@@ -102,18 +97,16 @@ function init() {
         event.reply("workData", resData);
     });
 
+    ipcMain.on("requestDates", (event, arg) => {
+        event.reply("getDates", workDates);
+    });
+
 }
 
 function closeWindow() {
     activeWindow.close();
     activeWindow = null;
 }
-
-// setInterval(() => {console.log(timeVal)}, 1000);
-
-app.on('window-all-closed', function () {
-    // if (process.platform !== 'darwin') app.quit()
-})
 
 function getTodayDate() {
     var today = new Date();
@@ -131,3 +124,9 @@ function getTodayDate() {
 
     return dd + "/" + mm + "/" + yyyy;
 }
+
+app.whenReady().then(init);
+
+app.on('window-all-closed', function () {
+    // if (process.platform !== 'darwin') app.quit()
+});

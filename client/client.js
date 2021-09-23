@@ -3,7 +3,7 @@ let submitBtn = document.getElementById("submitWork");
 let viewBtn = document.getElementById("viewWork");
 let workTable = document.getElementById("workTable");
 let timeValue = null;
-
+let availableDates = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     var timeDropdown = document.getElementById("timeDropdown");
@@ -15,12 +15,21 @@ document.addEventListener('DOMContentLoaded', function () {
         ipcRenderer.invoke("timeValue", this.value);
     });
 
+    // Get current delay value
     ipcRenderer.on("getTimeValue", (event, arg) => {
         timeValue = arg;
         console.log(timeValue);
     });
 
     ipcRenderer.send("requestTimeValue");
+
+    // Populate what dates are available
+    ipcRenderer.on("getDates", (event, arg) => {
+        availableDates = arg;
+        renderDateDropdown();
+    });
+
+    ipcRenderer.send("requestDates");
 });
 
 submitBtn.addEventListener("click", function () {
@@ -35,12 +44,10 @@ submitBtn.addEventListener("click", function () {
 });
 
 viewBtn.addEventListener("click", function () {
-    var dateTitle = document.getElementById("workDate");
     var workData;
 
     ipcRenderer.on("workData", function (event, args) {
         workData = args.data;
-        dateTitle.innerText = args.date;
         workData.forEach(workItem => {
             let tr = document.createElement("tr");
             let title = document.createElement("td");
@@ -78,5 +85,19 @@ viewBtn.addEventListener("click", function () {
     });
 
     ipcRenderer.send("requestWorkData");
-
 });
+
+// Creates the dropdown
+function renderDateDropdown() {
+    var selectDropdown = document.getElementById('workDates');
+    
+    availableDates.forEach(dateItem => {
+        var option = document.createElement("option");
+        option.innerText = dateItem;
+        option.setAttribute("value", "");
+
+        selectDropdown.appendChild(option);
+    });
+
+    M.FormSelect.init(selectDropdown);
+}

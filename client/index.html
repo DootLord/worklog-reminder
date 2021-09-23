@@ -40,13 +40,17 @@
       <div class="btnContainer">
         <a id="submitWork" class="halfWidth waves-effect waves-light btn green">Submit</a>
 
-        <a id="viewWork"class="halfWidth waves-effect waves-light btn modal-trigger" href="#modal1">View Work</a>
+        <a id="viewWork" class="halfWidth waves-effect waves-light btn modal-trigger" href="#modal1">View Work</a>
       </div>
 
-      
       <!-- Modal Structure -->
       <div id="modal1" class="modal">
-        <h4 id="workDate"> Loading... </h4>
+        <div class="input-field col s12">
+          <select id="workDates">
+          </select>
+          <label>Materialize Select</label>
+        </div>
+
         <div class="modal-content">
           <table>
             <thead>
@@ -58,7 +62,7 @@
             </thead>
 
             <tbody id="workTable">
-             
+
             </tbody>
           </table>
         </div>
