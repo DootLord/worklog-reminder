@@ -84,15 +84,18 @@ function init() {
 
     ipcMain.on("requestWorkData", (event, arg) => {
         var selectedDate = getTodayDate();
+        console.log(arg);
 
-        if (arg !== undefined) {
+        if (arg !== false) {
             selectedDate = arg;
-        }
+        } 
 
         var resData = {
             "date": selectedDate,
             "data": store.get("workLog")[selectedDate]
         };
+
+        console.log(resData);
 
         event.reply("workData", resData);
     });
@@ -100,7 +103,6 @@ function init() {
     ipcMain.on("requestDates", (event, arg) => {
         event.reply("getDates", workDates);
     });
-
 }
 
 function closeWindow() {

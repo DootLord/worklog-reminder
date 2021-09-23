@@ -1,9 +1,71 @@
+//todo: comments!
 const { ipcRenderer } = require('electron');
 let submitBtn = document.getElementById("submitWork");
 let viewBtn = document.getElementById("viewWork");
 let workTable = document.getElementById("workTable");
 let timeValue = null;
 let availableDates = [];
+
+ipcRenderer.on("workData", function (event, args) {
+    workData = args.data;
+    console.log(workData);
+    workData.forEach(workItem => {
+        let tr = document.createElement("tr");
+        let title = document.createElement("td");
+        let desc = document.createElement("td");
+        let duration = document.createElement("td");
+
+        title.innerText = workItem.title;
+        desc.innerText = workItem.desc;
+
+        switch (workItem.duration) {
+            case "1800":
+                duration.innerText = "30m";
+                break;
+            case "3600":
+                duration.innerText = "1h";
+                break;
+            case "5400":
+                duration.innerText = "1h 30m";
+                break;
+            case "7200":
+                duration.innerText = "2h";
+                break;
+            default:
+                duration.innerText = "N/A";
+                break;
+        }
+
+        tr.appendChild(title);
+        tr.appendChild(desc);
+        tr.appendChild(duration);
+
+        workTable.appendChild(tr);
+    });
+});
+
+// Creates the dropdown
+function renderDateDropdown() {
+    var selectDropdown = document.getElementById('workDates');
+
+    availableDates.forEach(dateItem => {
+        var option = document.createElement("option");
+        option.innerText = dateItem;
+        option.setAttribute("value", dateItem);
+
+        selectDropdown.appendChild(option);
+    });
+
+    M.FormSelect.init(selectDropdown);
+}
+
+function renderWorkData(date = false) {
+    var workData = null;
+    workTable.innerHTML = "";
+
+    ipcRenderer.send("requestWorkData", date);
+}
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var timeDropdown = document.getElementById("timeDropdown");
@@ -44,60 +106,11 @@ submitBtn.addEventListener("click", function () {
 });
 
 viewBtn.addEventListener("click", function () {
-    var workData;
-
-    ipcRenderer.on("workData", function (event, args) {
-        workData = args.data;
-        workData.forEach(workItem => {
-            let tr = document.createElement("tr");
-            let title = document.createElement("td");
-            let desc = document.createElement("td");
-            let duration = document.createElement("td");
-
-            title.innerText = workItem.title;
-            desc.innerText = workItem.desc;
-
-            switch (workItem.duration) {
-                case "1800":
-                    duration.innerText = "30m";
-                    break;
-                case "3600":
-                    duration.innerText = "1h";
-                    break;
-                case "5400":
-                    duration.innerText = "1h 30m";
-                    break;
-                case "7200":
-                    duration.innerText = "2h";
-                    break;
-                default:
-                    duration.innerText = "N/A";
-                    break;
-            }
-
-            tr.appendChild(title);
-            tr.appendChild(desc);
-            tr.appendChild(duration);
-
-            workTable.appendChild(tr);
-        });
-        console.log(workData);
-    });
-
-    ipcRenderer.send("requestWorkData");
+    renderWorkData();
 });
 
-// Creates the dropdown
-function renderDateDropdown() {
-    var selectDropdown = document.getElementById('workDates');
-    
-    availableDates.forEach(dateItem => {
-        var option = document.createElement("option");
-        option.innerText = dateItem;
-        option.setAttribute("value", "");
-
-        selectDropdown.appendChild(option);
-    });
-
-    M.FormSelect.init(selectDropdown);
-}
+document.getElementById("workDates").addEventListener("change", function () {
+    var selectedDate = this.value;
+    console.log("Selected date: " + selectedDate);
+    renderWorkData(selectedDate);
+});
